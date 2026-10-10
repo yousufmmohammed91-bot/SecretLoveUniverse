@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10051f">
+  <title>The Door to a Story Not Yet Written 💜</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stars" aria-hidden="true"></div>
+
+  <section class="screen active" id="welcome">
+    <div class="moon">🌙</div>
+    <div class="intro-card">
+      <p class="eyebrow">✦ A LITTLE SECRET AWAITS ✦</p>
+      <h1>The Door to a<br><span>Story Not Yet Written</span></h1>
+      <p class="subtitle">Somewhere between a stranger and a beautiful possibility, a little story begins.</p>
+      <div class="magic-door" aria-hidden="true">
+        <div class="door-frame"><div class="door"><span>💜</span></div></div>
+        <div class="door-light"></div>
+      </div>
+      <p class="description">A little universe inspired by purple skies, beautiful music, and the magic of meeting someone new.</p>
+      <button onclick="openDoor()">✨ DISCOVER YOUR SECRET</button>
+      <p class="small-note">Made with care, just for this moment 💌</p>
+    </div>
+  </section>
+
+  <section class="screen" id="universe">
+    <p class="eyebrow">✦ BEYOND THE ORDINARY ✦</p>
+    <h2>Welcome to Your Little Universe 💜</h2>
+    <p class="description">Every beautiful story starts somewhere. This one starts with getting to know you.</p>
+    <div class="planet">🌌</div>
+    <div class="glass-card">
+      <h3>A tiny introduction...</h3>
+      <p>I don't know your whole story yet. I thought it would be nice to create a little space where you could share a few things about yourself.</p>
+      <p>No pressure, no perfect answers. Just be yourself. 🌷</p>
+    </div>
+    <button onclick="showScreen('questions')">OPEN YOUR SECRET JOURNAL 💌</button>
+    <p class="small-note">Your story is yours to tell.</p>
+  </section>
+
+  <section class="screen" id="questions">
+    <p class="eyebrow">✦ A FEW LITTLE QUESTIONS ✦</p>
+    <h2>Let's Get to Know You 🌸</h2>
+    <p class="description">Answer whichever questions you feel comfortable answering.</p>
+    <div class="form-card">
+      <label for="nickname">01. What should I call you? 💗</label>
+      <input id="nickname" type="text" maxlength="40" placeholder="Your name or nickname...">
+
+      <label for="bts">02. Who is your favourite BTS member? 💜</label>
+      <select id="bts">
+        <option value="">Choose your favourite...</option>
+        <option>RM</option><option>Jin</option><option>SUGA</option>
+        <option>j-hope</option><option>Jimin</option><option>V</option>
+        <option>Jungkook</option><option>All BTS members</option>
+        <option>I'm not an ARMY</option>
+      </select>
+
+      <label for="song">03. What's your favourite BTS song? 🎵</label>
+      <input id="song" type="text" maxlength="100" placeholder="A song you love...">
+
+      <label for="happiness">04. What makes you happiest? 🌷</label>
+      <select id="happiness">
+        <option value="">Choose an answer...</option>
+        <option>Listening to music</option><option>Spending time with friends</option>
+        <option>Peaceful moments alone</option><option>Making beautiful memories</option>
+        <option>Learning or trying new things</option><option>Something else</option>
+      </select>
+
+      <label for="friendship">05. What do you think about unexpected friendships? 🦋</label>
+      <select id="friendship">
+        <option value="">Choose an answer...</option>
+        <option>They can be beautiful!</option><option>Good friendships take time.</option>
+        <option>I'm open to meeting new people.</option><option>Let's see where life takes us.</option>
+      </select>
+
+      <label for="message">06. Anything you'd like to share? 💌</label>
+      <textarea id="message" maxlength="300" placeholder="Write anything you feel comfortable sharing..."></textarea>
+
+      <button onclick="saveAnswers()">💜 SAVE MY ANSWERS</button>
+      <p class="small-note">Your answers stay in this browser. You choose whether to share them.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="answerScreen">
+    <p class="eyebrow">✦ YOUR LITTLE COLLECTION OF ANSWERS ✦</p>
+    <div class="answer-card" id="answerCard">
+      <div class="card-top">💜 ✨ 🌙 ✨ 💜</div>
+      <h2 id="personalTitle">Your Little Universe</h2>
+      <p class="card-subtitle">A few little things that make you, YOU.</p>
+      <div id="answerList"></div>
+      <div class="card-bottom">
+        <p>Every person has a story worth knowing. 🌷</p>
+        <p class="signature">A little memory from a little universe 💜</p>
+      </div>
+    </div>
+    <button onclick="downloadAnswers()">📸 SAVE MY ANSWERS AS A FILE</button>
+    <button class="secondary" onclick="showScreen('letter')">💌 DISCOVER THE LAST SECRET</button>
+    <p class="small-note">Open the saved file and take a screenshot if you want to share your answers.</p>
+  </section>
+
+  <section class="screen" id="letter">
+    <p class="eyebrow">✦ ONE LAST LITTLE SECRET ✦</p>
+    <div class="letter-card">
+      <div class="envelope">💌</div>
+      <h2>Something From My Heart</h2>
+      <p id="letterGreeting">Hey, you. 💜</p>
+      <p>I made this little universe because I wanted to do something different from an ordinary message.</p>
+      <p>I don't know your whole story yet, and I won't pretend that I do. But I'd genuinely like to learn more about you, your dreams, the music you love, and the little things that make you smile.</p>
+      <p>Maybe our first conversations will be simple. Maybe we'll discover things we have in common. Maybe we'll surprise each other along the way.</p>
+      <p>I can't promise what the future holds. I can only be honest about what I'd like: the chance to get to know you better.</p>
+      <p class="highlight">Sometimes, a beautiful story doesn't begin with a grand declaration of love. Sometimes, it begins with a simple hello. 💜</p>
+      <h3>So, may I ask you something? 🌷</h3>
+      <p class="proposal-question">Would you like to get to know me better?</p>
+      <button onclick="chooseResponse('yes')">💗 YES, LET'S TALK!</button>
+      <button class="secondary" onclick="chooseResponse('slow')">🌷 LET'S TAKE OUR TIME</button>
+      <p id="responseMessage" class="response-message" aria-live="polite"></p>
+    </div>
+    <button class="restart" onclick="restartJourney()">↻ VISIT THE UNIVERSE AGAIN</button>
+  </section>
+
+  <footer><p>Created with 💜, a little imagination, and genuine feelings.</p></footer>
+  <script src="script.js"></script>
+</body>
+</html>

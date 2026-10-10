@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+:root{--purple:#c7a3ff;--pink:#ffb6df;--white:#fff8ff;--glass:rgba(35,19,57,.82)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#32134c 0%,transparent 55%),linear-gradient(150deg,#090512,#1c0d30,#090512);color:var(--white);font-family:Poppins,sans-serif;overflow-x:hidden}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;color:white;animation:twinkle 3s infinite ease-in-out}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
+.screen{display:none;position:relative;z-index:1;width:100%;min-height:100vh;padding:55px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:fadeIn .8s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.moon{font-size:50px;margin-bottom:12px;filter:drop-shadow(0 0 20px #c9a4ff)}
+.eyebrow{color:var(--pink);font-size:10px;letter-spacing:4px;margin-bottom:22px}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}
+h1{font-size:clamp(35px,7vw,66px);line-height:1.13;margin-bottom:20px}
+h1 span{color:var(--purple);text-shadow:0 0 30px #9a59ff55}
+h2{color:var(--purple);font-size:clamp(30px,5vw,43px);margin-bottom:20px}
+h3{font-size:26px;margin-bottom:15px;color:var(--pink)}
+.subtitle,.description{max-width:570px;line-height:1.9;color:#e7d9f8;font-size:13px;margin:0 auto 28px}
+.magic-door{position:relative;width:170px;height:220px;margin:25px auto 35px;display:flex;justify-content:center;align-items:center}
+.door-frame{position:absolute;bottom:0;width:155px;height:210px;border:4px solid #d2b2ff;border-radius:80px 80px 0 0;padding:8px;box-shadow:0 0 15px #a56cff,0 0 40px #a56cff77,inset 0 0 20px #a56cff33}
+.door{width:100%;height:100%;border-radius:70px 70px 0 0;background:linear-gradient(130deg,#5e347f,#241036,#10061d);border:2px solid #9c6dd6;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:inset 0 0 30px #0009;transition:transform 1.3s ease;transform-origin:left}
+.door.open{transform:perspective(500px) rotateY(-75deg)}
+.door-light{position:absolute;width:110px;height:130px;bottom:0;z-index:-1;background:#d1a5ff;filter:blur(55px);opacity:.4;transition:opacity 1s}
+.magic-door:hover .door-light{opacity:.9}
+button{display:inline-block;max-width:100%;border:1px solid #e5c7ff;border-radius:35px;padding:15px 24px;background:linear-gradient(110deg,#8f51ce,#d174b8);color:white;font-family:Poppins,sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;cursor:pointer;margin:10px 5px;box-shadow:0 0 22px #a665ff44;transition:transform .25s,box-shadow .25s}
+button:hover{transform:translateY(-3px);box-shadow:0 0 30px #bf91ff99}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid white;outline-offset:4px}
+.secondary{background:transparent;border:1px solid #b9a0d9;color:#e7d6ff;box-shadow:none}
+.glass-card,.form-card,.answer-card,.letter-card{width:100%;max-width:600px;background:var(--glass);border:1px solid #c9a5ff44;border-radius:24px;padding:28px;backdrop-filter:blur(15px);box-shadow:0 15px 60px #0005}
+.glass-card{margin:15px 0 25px}
+.glass-card p,.letter-card p{color:#e2d4f1;font-size:13px;line-height:2;margin:12px 0}
+.planet{font-size:75px;margin:10px 0;filter:drop-shadow(0 0 25px #b48cff);animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.form-card{text-align:left}
+.form-card label{display:block;color:var(--pink);font-size:12px;margin:24px 0 10px;line-height:1.8}
+.form-card input,.form-card select,.form-card textarea{display:block;width:100%;min-height:48px;padding:13px;background:#140b24;border:1px solid #8d69b8;border-radius:12px;color:white;font-family:Poppins,sans-serif;font-size:12px}
+.form-card textarea{min-height:100px;resize:vertical}
+.form-card input::placeholder,.form-card textarea::placeholder{color:#aa96c1}
+.form-card button{width:100%;margin:30px 0 5px}
+.small-note{color:#aa98c0;font-size:10px;margin-top:18px;line-height:1.8}
+.answer-card{background:radial-gradient(ellipse at top,#542b78,transparent 65%),linear-gradient(150deg,#21102f,#10091c);border:1px solid #e5c1ff88;margin:15px 0 25px;text-align:left}
+.card-top{text-align:center;letter-spacing:6px;margin-bottom:20px}
+.answer-card h2{text-align:center;overflow-wrap:anywhere}
+.card-subtitle{text-align:center;color:#e4d2f6;font-size:11px;margin-bottom:25px}
+.answer-row{padding:15px 0;border-bottom:1px solid #c8a4ff33}
+.answer-label{color:var(--pink);font-size:10px;margin-bottom:6px}
+.answer-value{color:white;font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.card-bottom{text-align:center;padding-top:25px;color:#e4d2f6;font-size:11px;line-height:2}
+.signature{color:var(--pink);font-family:"Cormorant Garamond",Georgia,serif;font-size:19px;margin-top:10px}
+.letter-card{text-align:center;padding:32px}
+.envelope{font-size:55px;margin-bottom:15px;filter:drop-shadow(0 0 18px #d29bff)}
+.highlight{color:var(--pink)!important;border-top:1px solid #bda0df55;border-bottom:1px solid #bda0df55;padding:18px 0}
+.proposal-question{color:white!important;font-family:"Cormorant Garamond",Georgia,serif;font-size:27px!important}
+.response-message{color:var(--pink)!important;margin-top:20px;font-size:14px!important}
+.restart{margin-top:25px;background:transparent}
+footer{position:relative;z-index:1;text-align:center;padding:20px;color:#9e8bb4;font-size:10px}
+@media(max-width:480px){.screen{padding:40px 14px}.form-card,.answer-card,.letter-card,.glass-card{padding:22px 17px;border-radius:19px}button{font-size:10px;padding:14px 18px}.eyebrow{letter-spacing:2px;font-size:9px}}
