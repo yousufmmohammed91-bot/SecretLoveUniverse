@@ -1,261 +1,168 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const $ = (id) => document.getElementById(id);
+// Create a gentle starry background.
+const starContainer = document.getElementById("stars");
 
-    // Safely connect to elements that exist in index.html
-    const opening = $("opening-screen");
-    const main = $("main-content");
+for (let i = 0; i < 90; i++) {
+  const star = document.createElement("span");
+  star.className = "star";
+  star.textContent = Math.random() > 0.5 ? "✦" : "·";
+  star.style.left = Math.random() * 100 + "%";
+  star.style.top = Math.random() * 100 + "%";
+  star.style.fontSize = (8 + Math.random() * 12) + "px";
+  star.style.animationDelay = Math.random() * 3 + "s";
+  star.style.animationDuration = (2 + Math.random() * 4) + "s";
+  starContainer.appendChild(star);
+}
 
-    // Open the secret universe
-    window.enterUniverse = function () {
-        if (opening) opening.style.display = "none";
-        if (main) main.style.display = "block";
+function showScreen(screenId) {
+  document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+  const nextScreen = document.getElementById(screenId);
+  if (nextScreen) {
+    nextScreen.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+function openDoor() {
+  document.querySelector(".door").classList.add("open");
+  setTimeout(() => showScreen("universe"), 950);
+}
 
-    // Question and answer collection
-    const questions = [
-        {
-            question: "Which BTS song feels like magic to you? 💜",
-            placeholder: "Type your favourite BTS song..."
-        },
-        {
-            question: "If you could visit one magical world, where would you go? 🌌",
-            placeholder: "Describe your dream world..."
-        },
-        {
-            question: "What is one little thing that makes you smile? ✨",
-            placeholder: "Tell me something that makes you happy..."
-        },
-        {
-            question: "What makes a conversation memorable for you? 🌙",
-            placeholder: "Share your thoughts..."
-        }
-    ];
+const questionFields = [
+  { id: "nickname", label: "Your name or nickname" },
+  { id: "bts", label: "Favourite BTS member" },
+  { id: "song", label: "Favourite BTS song" },
+  { id: "happiness", label: "What makes you happy" },
+  { id: "friendship", label: "Your thoughts on unexpected friendships" },
+  { id: "message", label: "Something you'd like to share" }
+];
 
-    let currentQuestion = 0;
-    const answers = [];
+function readAnswersFromForm() {
+  const answers = {};
+  questionFields.forEach(field => {
+    answers[field.id] = document.getElementById(field.id).value.trim();
+  });
+  return answers;
+}
 
-    const questionText = $("question-text");
-    const answerInput = $("answer-input");
-    const nextButton = $("next-question");
-    const questionNumber = $("question-number");
-    const answerArea = $("answer-area");
+function saveAnswers() {
+  const answers = readAnswersFromForm();
 
-    function displayQuestion() {
-        if (!questionText || !answerInput) return;
+  if (!answers.nickname) {
+    alert("Please enter your name or nickname first 💜");
+    document.getElementById("nickname").focus();
+    return;
+  }
 
-        const item = questions[currentQuestion];
+  try {
+    localStorage.setItem("secretLoveUniverseAnswers", JSON.stringify(answers));
+  } catch (error) {
+    console.warn("Browser storage unavailable.", error);
+  }
 
-        questionText.textContent = item.question;
-        answerInput.value = answers[currentQuestion] || "";
-        answerInput.placeholder = item.placeholder;
+  createAnswerCard(answers);
+  showScreen("answerScreen");
+}
 
-        if (questionNumber) {
-            questionNumber.textContent =
-                `Question ${currentQuestion + 1} of ${questions.length}`;
-        }
+function createAnswerCard(answers) {
+  document.getElementById("personalTitle").textContent =
+    answers.nickname + "'s Little Universe 💜";
+  document.getElementById("letterGreeting").textContent =
+    "Hey, " + answers.nickname + ". 💜";
 
-        if (nextButton) {
-            nextButton.textContent =
-                currentQuestion === questions.length - 1
-                    ? "Reveal the next chapter ✨"
-                    : "Next question →";
-        }
-    }
+  const list = document.getElementById("answerList");
+  list.replaceChildren();
 
-    if (nextButton) {
-        nextButton.addEventListener("click", () => {
-            if (!answerInput || !questionText) return;
+  questionFields.forEach(field => {
+    const value = answers[field.id];
+    if (!value) return;
 
-            const answer = answerInput.value.trim();
+    const row = document.createElement("div");
+    row.className = "answer-row";
 
-            if (!answer) {
-                answerInput.focus();
-                answerInput.placeholder = "Write a little answer first 💜";
-                return;
-            }
+    const label = document.createElement("div");
+    label.className = "answer-label";
+    label.textContent = field.label;
 
-            answers[currentQuestion] = answer;
+    const answer = document.createElement("div");
+    answer.className = "answer-value";
+    answer.textContent = value;
 
-            // Save answers on this device only
-            try {
-                localStorage.setItem(
-                    "secretLoveUniverseAnswers",
-                    JSON.stringify(answers)
-                );
-            } catch (error) {
-                console.warn("Browser storage is unavailable.");
-            }
+    row.append(label, answer);
+    list.appendChild(row);
+  });
+}
 
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                displayQuestion();
-            } else {
-                showFinalChapter();
-            }
-        });
-    }
+function restoreAnswers() {
+  try {
+    const saved = localStorage.getItem("secretLoveUniverseAnswers");
+    if (!saved) return;
+    const answers = JSON.parse(saved);
 
-    function showFinalChapter() {
-        if (!answerArea) return;
+    questionFields.forEach(field => {
+      const input = document.getElementById(field.id);
+      if (input && typeof answers[field.id] === "string") input.value = answers[field.id];
+    });
+  } catch (error) {
+    console.warn("Could not restore saved answers.", error);
+  }
+}
+restoreAnswers();
 
-        answerArea.innerHTML = `
-            <div class="final-chapter">
-                <h2>✨ A Little Piece of Your Universe ✨</h2>
-                <p>Every answer tells a tiny part of your story. 💜</p>
+// Download a self-contained HTML answer card. Open it, then take a screenshot.
+function downloadAnswers() {
+  const answers = readAnswersFromForm();
+  // Prefer the saved answers when available.
+  try {
+    const saved = localStorage.getItem("secretLoveUniverseAnswers");
+    if (saved) Object.assign(answers, JSON.parse(saved));
+  } catch (_) {}
 
-                <div id="answer-card"></div>
+  const title = (answers.nickname || "Your") + "'s Little Universe 💜";
+  const rows = questionFields
+    .filter(field => answers[field.id])
+    .map(field => `<div class="row"><div class="label">${escapeHTML(field.label)}</div><div class="value">${escapeHTML(answers[field.id])}</div></div>`)
+    .join("");
 
-                <button id="download-card" type="button">
-                    Save Your Answer Card 🌌
-                </button>
+  const exportDocument = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>My Little Universe</title><style>
+*{box-sizing:border-box}body{margin:0;padding:24px 12px;background:#100719;color:#fff8ff;font-family:Georgia,serif}
+.card{max-width:560px;margin:0 auto;padding:28px 22px;border:1px solid #d7b0ff;border-radius:22px;background:linear-gradient(145deg,#392052,#13091f);overflow-wrap:anywhere}
+.top,.bottom{text-align:center;line-height:2}h1{text-align:center;color:#d9baff;font-size:30px}.subtitle{text-align:center;color:#ead9ff}
+.row{padding:14px 0;border-bottom:1px solid #9e7fc355}.label{color:#ffbfe4;font-size:13px;margin-bottom:7px}.value{font-family:Arial,sans-serif;line-height:1.8;white-space:pre-wrap}
+.bottom{margin-top:25px;color:#f3d7ff}.signature{color:#ffbfe4;font-style:italic}.hint{text-align:center;color:#d6c2e7;font:12px Arial,sans-serif}
+</style></head><body><p class="hint">Take a screenshot of this card to save or share it.</p>
+<main class="card"><div class="top">💜 ✨ 🌙 ✨ 💜</div><h1>${escapeHTML(title)}</h1>
+<p class="subtitle">A few little things that make you, YOU.</p>${rows}
+<div class="bottom"><p>Every person has a story worth knowing. 🌷</p><p class="signature">A little memory from a little universe 💜</p></div></main></body></html>`;
 
-                <p class="screenshot-note">
-                    You can save or screenshot this card if you want to share it.
-                </p>
+  const blob = new Blob([exportDocument], { type: "text/html;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "My-Little-Universe.html";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 
-                <h2>The Door to a New Chapter 💜</h2>
-                <p>
-                    I would like to get to know you better, if you're comfortable.
-                    No pressure — your choice matters.
-                </p>
+  alert("Your answer card has been saved as an HTML file. Open it and take a screenshot to share it. 💜");
+}
 
-                <button id="yes-choice" type="button">
-                    YES, LET'S TALK! 💜
-                </button>
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+  })[character]);
+}
 
-                <button id="slow-choice" type="button">
-                    LET'S TAKE OUR TIME 🌙
-                </button>
+function chooseResponse(choice) {
+  const response = document.getElementById("responseMessage");
+  response.textContent = choice === "yes"
+    ? "That would make this little beginning special. I hope we can have a lovely conversation. 💜"
+    : "That's completely okay. Good things can take time. Thank you for visiting this little universe. 🌷";
+}
 
-                <p id="choice-message" aria-live="polite"></p>
-            </div>
-        `;
-
-        const card = $("answer-card");
-
-        if (card) {
-            card.innerHTML = questions.map((item, index) => `
-                <div class="answer-item">
-                    <h3>${escapeHTML(item.question)}</h3>
-                    <p>${escapeHTML(answers[index] || "")}</p>
-                </div>
-            `).join("");
-        }
-
-        const downloadButton = $("download-card");
-
-        if (downloadButton) {
-            downloadButton.addEventListener("click", downloadAnswerCard);
-        }
-
-        const yesButton = $("yes-choice");
-        const slowButton = $("slow-choice");
-        const message = $("choice-message");
-
-        if (yesButton && message) {
-            yesButton.addEventListener("click", () => {
-                message.textContent =
-                    "A new chapter begins! 💜 Let's start with a friendly conversation.";
-            });
-        }
-
-        if (slowButton && message) {
-            slowButton.addEventListener("click", () => {
-                message.textContent =
-                    "Of course! 🌙 There's no rush. We can take things one step at a time.";
-            });
-        }
-    }
-
-    function escapeHTML(value) {
-        return String(value).replace(/[&<>"']/g, (character) => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#39;"
-        })[character]);
-    }
-
-    function downloadAnswerCard() {
-        const card = $("answer-card");
-        if (!card) return;
-
-        const page = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-                <title>My Secret Universe 💜</title>
-                <style>
-                    body {
-                        background: #100824;
-                        color: #fff;
-                        font-family: Arial, sans-serif;
-                        padding: 24px;
-                        line-height: 1.6;
-                    }
-                    main {
-                        max-width: 650px;
-                        margin: auto;
-                        padding: 24px;
-                        border: 1px solid #b58cff;
-                        border-radius: 20px;
-                        background: #20103d;
-                    }
-                    h1, h2 { color: #e0c3ff; }
-                    .answer-item {
-                        padding: 12px;
-                        margin: 14px 0;
-                        border-radius: 12px;
-                        background: #321b50;
-                        overflow-wrap: anywhere;
-                    }
-                    p { white-space: pre-wrap; }
-                </style>
-            </head>
-            <body>
-                <main>
-                    <h1>My Secret Universe 🌌💜</h1>
-                    ${card.innerHTML}
-                    <p>A little story, written one answer at a time. ✨</p>
-                </main>
-            </body>
-            </html>
-        `;
-
-        const blob = new Blob([page], { type: "text/html;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = "my-secret-universe.html";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-    }
-
-    // Restore saved answers if available
-    try {
-        const saved = JSON.parse(
-            localStorage.getItem("secretLoveUniverseAnswers") || "[]"
-        );
-
-        if (Array.isArray(saved)) {
-            saved.forEach((answer, index) => {
-                if (typeof answer === "string" && index < questions.length) {
-                    answers[index] = answer;
-                }
-            });
-        }
-    } catch (error) {
-        console.warn("Could not restore saved answers.");
-    }
-
-    displayQuestion();
-});
+function restartJourney() {
+  document.querySelector(".door").classList.remove("open");
+  showScreen("welcome");
+}
